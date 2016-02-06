@@ -1,6 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="photo_placeholder">#ccc</color>
+
+    <color name="deep_orange_400">#FF7043</color>
+    <!-- Main Theme Colors-->
+    <color name="deep_orange_500">#FF5722</color>
+    <color name="deep_orange_700">#E64A19</color>
+
+    <color name="orange_900">#E65100</color>
+    <color name="teal_500">#009688</color>
+    <color name="lime_500">#CDDC39</color>
+    <!--Accent Color -->
+    <color name="lime_a200">#EEFF41</color>
+    <!-- Text Color-->
+    <color name="gray_900">#212121</color>
+    <color name="gray_650">#727272</color>
+
+    <color name="ltgray">#ffe0e0e0</color>
+    <color name="midgray">#8fff</color>
+    <color name="white">#fff</color>
+
+
 </resources>

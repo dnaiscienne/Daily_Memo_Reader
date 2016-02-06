@@ -59,7 +59,6 @@ public class RemoteEndpointUtil {
                             abstractGoogleClientRequest.setDisableGZipContent(true);
                         }
                     });
-
             myApiService = builder.build();
         }
             return myApiService.loadEntries().execute().getData();

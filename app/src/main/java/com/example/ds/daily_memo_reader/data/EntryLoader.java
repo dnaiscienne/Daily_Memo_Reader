@@ -8,7 +8,7 @@ import android.net.Uri;
  * Created by DS on 2/6/2016.
  */
 public class EntryLoader extends CursorLoader {
-    public static EntryLoader newAllEntriesnstance(Context context) {
+    public static EntryLoader newAllEntriesInstance(Context context) {
         return new EntryLoader(context, EntriesContract.Entries.buildDirUri());
     }
 
