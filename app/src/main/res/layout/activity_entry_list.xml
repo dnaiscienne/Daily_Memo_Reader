@@ -33,7 +33,7 @@
                     android:src="@drawable/logo"
                     android:contentDescription="@string/app_name"
                     app:layout_collapseMode="pin"
-                    app:contentInsetStart="72dp"/>
+                    app:contentInsetStart="@dimen/list_content_inset_start"/>
 
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -53,7 +53,7 @@
             android:scrollbarStyle="outsideOverlay"
             android:paddingLeft="@dimen/list_side_margin"
             android:paddingRight="@dimen/list_side_margin"
-            android:paddingBottom="60dp"
+            android:paddingBottom="@dimen/list_bottom_padding"
             />
     </android.support.v4.widget.SwipeRefreshLayout>
 

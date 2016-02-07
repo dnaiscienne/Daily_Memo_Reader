@@ -20,6 +20,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.EntryDetailActivity"
+            android:parentActivityName=".ui.EntryListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/com.example.ds.daily_memo_reader.entries" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.EntryListActivity" />
+        </activity>
         <service android:name=".data.UpdaterService"
             android:exported="false" />
 

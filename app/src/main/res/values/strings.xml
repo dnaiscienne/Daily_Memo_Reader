@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Daily_Memo_Reader</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
+
+    <string name="up">Up</string>
 </resources>

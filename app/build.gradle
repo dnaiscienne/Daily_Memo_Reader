@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(path: ':backend', configuration: 'android-endpoints')
+    compile files('libs/volley.jar')
 }

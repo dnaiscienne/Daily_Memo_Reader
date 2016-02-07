@@ -13,7 +13,11 @@
     <!-- list -->
     <dimen name="list_side_margin">4dp</dimen>
     <dimen name="list_toolbar_side_margin">0dp</dimen>
-    <integer name="list_column_count">2</integer>
+    <integer name="list_column_count">1</integer>
+    <dimen name="list_bottom_padding">4dp</dimen>
+    <dimen name="list_content_inset_start">72dp</dimen>
+    <dimen name="list_image_height">160dp</dimen>
+    <dimen name="list_scrim_height">160dp</dimen>
 
     <!-- detail -->
     <bool name="detail_is_card">false</bool>
@@ -25,5 +29,6 @@
     <dimen name="detail_metabar_title_bottom_padding">4dp</dimen>
     <dimen name="detail_body_top_margin">16dp</dimen>
     <dimen name="detail_body_bottom_margin">88dp</dimen>
+    <dimen name="detail_up_button_width">56dp</dimen>
 
 </resources>
