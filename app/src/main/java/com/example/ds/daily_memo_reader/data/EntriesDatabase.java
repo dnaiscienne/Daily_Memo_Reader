@@ -27,6 +27,17 @@ public class EntriesDatabase extends SQLiteOpenHelper {
                 + EntriesContract.EntriesColumns.PHOTO_URL + " TEXT NOT NULL,"
                 + EntriesContract.EntriesColumns.PUBLISHED_DATE + " INTEGER NOT NULL DEFAULT 0"
                 + ")" );
+
+        db.execSQL("CREATE TABLE " + EntriesProvider.Tables.FAVORITES + " ("
+                + EntriesContract.EntriesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + EntriesContract.EntriesColumns.ENTRY_ID + " TEXT,"
+                + EntriesContract.EntriesColumns.TITLE + " TEXT NOT NULL,"
+                + EntriesContract.EntriesColumns.AUTHOR + " TEXT NOT NULL,"
+                + EntriesContract.EntriesColumns.BODY + " TEXT NOT NULL,"
+                + EntriesContract.EntriesColumns.THUMB_URL + " TEXT NOT NULL,"
+                + EntriesContract.EntriesColumns.PHOTO_URL + " TEXT NOT NULL,"
+                + EntriesContract.EntriesColumns.PUBLISHED_DATE + " INTEGER NOT NULL DEFAULT 0"
+                + ")" );
     }
 
     @Override

@@ -21,6 +21,7 @@ public class EntriesProvider extends ContentProvider {
     private SQLiteOpenHelper mOpenHelper;
     interface Tables {
         String ENTRIES = "entries";
+        String FAVORITES = "favorites";
     }
 
     private static final int ENTRIES = 0;

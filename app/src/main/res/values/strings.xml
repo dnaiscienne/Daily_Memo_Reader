@@ -5,4 +5,10 @@
     <string name="action_share">Share</string>
 
     <string name="up">Up</string>
+
+    <string name="empty_entry_list">No entries found.</string>
+    <string name="descr_overflow_button">Sort options</string>
+
+    <string name="setting_toggle_favorite">Show Favorites</string>
+    <string name="setting_toggle_recent">Show Recent</string>
 </resources>

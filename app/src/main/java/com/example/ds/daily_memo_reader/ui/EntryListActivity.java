@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -16,10 +17,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ds.daily_memo_reader.R;
 import com.example.ds.daily_memo_reader.data.EntriesContract;
@@ -37,6 +41,8 @@ public class EntryListActivity extends AppCompatActivity implements
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private AppBarLayout mAppBarLayout;
+    private static final String PREF_FAVORITE = "favorite";
+    private boolean mFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,7 @@ public class EntryListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_entry_list);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
 
 //        final View toolbarContainerView = findViewById(R.id.toolbar_container);
@@ -69,6 +76,47 @@ public class EntryListActivity extends AppCompatActivity implements
             refresh();
         }
         mAppBarLayout = (AppBarLayout) findViewById(R.id.toolbar_container);
+        SharedPreferences pref = getPreferences(MODE_PRIVATE);
+        mFavorite = pref.getBoolean(PREF_FAVORITE, false);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(mFavorite){
+            menu.getItem(0).getSubMenu().getItem(0).setTitle(R.string.setting_toggle_recent);
+        }else{
+            menu.getItem(0).getSubMenu().getItem(0).setTitle(R.string.setting_toggle_favorite);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        SharedPreferences pref = getPreferences(MODE_PRIVATE);
+
+        //noinspection SimplifiableIfStatement
+
+        if (id == R.id.toggle_favorite) {
+            SharedPreferences.Editor editor = pref.edit();
+            if(mFavorite){
+                mFavorite = false;
+                editor.putBoolean(PREF_FAVORITE, mFavorite);
+                item.setTitle(R.string.setting_toggle_favorite);
+                Toast.makeText(this, "Recent View", Toast.LENGTH_SHORT).show();
+            }else{
+                mFavorite = true;
+                editor.putBoolean(PREF_FAVORITE, mFavorite);
+                item.setTitle(R.string.setting_toggle_recent);
+                Toast.makeText(this, "Favorites View", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void refresh() {
