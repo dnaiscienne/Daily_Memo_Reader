@@ -98,20 +98,79 @@
         </FrameLayout>
     </com.example.ds.daily_memo_reader.ui.ObservableScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-
-        android:id="@+id/share_fab"
-        app:elevation="@dimen/fab_elevation"
-        app:fabSize="normal"
-        android:layout_gravity="bottom|end"
-        app:pressedTranslationZ="@dimen/fab_press_translation_z"
-        app:borderWidth="0dp"
-        android:stateListAnimator="@anim/fab_state_list_anim"
-        android:layout_margin="@dimen/fab_margin"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_share"
-        android:contentDescription="@string/action_share" />
+        android:layout_gravity="bottom|end"
+        android:orientation="vertical">
+
+        <android.support.design.widget.FloatingActionButton
+
+            android:id="@+id/favorite_fab"
+            app:elevation="@dimen/fab_elevation"
+            app:fabSize="normal"
+            android:layout_gravity="bottom|end"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            app:borderWidth="0dp"
+            android:stateListAnimator="@anim/fab_state_list_anim"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin_adjacent"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bookmark_border_white"
+            android:contentDescription="@string/action_favorite" />
+
+        <android.support.design.widget.FloatingActionButton
+
+            android:id="@+id/share_fab"
+            app:elevation="@dimen/fab_elevation"
+            app:fabSize="normal"
+            app:pressedTranslationZ="@dimen/fab_press_translation_z"
+            app:borderWidth="0dp"
+            android:stateListAnimator="@anim/fab_state_list_anim"
+            android:layout_marginTop="@dimen/fab_margin_adjacent"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share"
+            android:contentDescription="@string/action_share" />
+
+
+    </LinearLayout>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+
+        <!--android:id="@+id/share_fab"-->
+        <!--app:elevation="@dimen/fab_elevation"-->
+        <!--app:fabSize="normal"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--app:pressedTranslationZ="@dimen/fab_press_translation_z"-->
+        <!--app:borderWidth="0dp"-->
+        <!--android:stateListAnimator="@anim/fab_state_list_anim"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_share"-->
+        <!--android:contentDescription="@string/action_share" />-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+
+        <!--android:id="@+id/favorite_fab"-->
+        <!--app:elevation="@dimen/fab_elevation"-->
+        <!--app:fabSize="normal"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--app:pressedTranslationZ="@dimen/fab_press_translation_z"-->
+        <!--app:borderWidth="0dp"-->
+        <!--android:stateListAnimator="@anim/fab_state_list_anim"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_bookmark_border_white"-->
+        <!--android:contentDescription="@string/action_favorite" />-->
 
 
 </com.example.ds.daily_memo_reader.ui.DrawInsetsFrameLayout>

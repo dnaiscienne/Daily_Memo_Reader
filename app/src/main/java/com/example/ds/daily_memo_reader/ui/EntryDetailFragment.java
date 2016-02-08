@@ -3,6 +3,7 @@ package com.example.ds.daily_memo_reader.ui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.ds.daily_memo_reader.R;
+import com.example.ds.daily_memo_reader.data.EntriesContract;
 import com.example.ds.daily_memo_reader.data.EntryLoader;
 
 /**
@@ -47,6 +49,9 @@ public class EntryDetailFragment extends Fragment implements
     private ObservableScrollView mScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
+
+    private boolean mIsFavorite = false;
+    private android.support.design.widget.FloatingActionButton mFavoriteFab;
 
     private int mTopInset;
     private View mPhotoContainerView;
@@ -140,10 +145,37 @@ public class EntryDetailFragment extends Fragment implements
                         .getIntent(), getString(R.string.action_share)));
             }
         });
+
+        mRootView.findViewById(R.id.favorite_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mActivity != null) {
+                    mIsFavorite = mCursor.getInt(EntryLoader.Query.FAVORITE) == 1 ? true : false;
+                    Log.v("FAV", Boolean.toString(mIsFavorite));
+                    mIsFavorite = !mIsFavorite;
+                    ContentValues cv = new ContentValues();
+                    cv.put(EntriesContract.Entries.FAVORITE, mIsFavorite ? 1 : 0);
+                    mActivity.getContentResolver().update(EntriesContract.Entries.buildEntryUri(mItemId), cv, null, null);
+                    updateFavoriteFab();
+                }
+            }
+        });
         mLoadingPanel = (ProgressBar) mRootView.findViewById(R.id.loadingPanel);
         bindViews();
         updateStatusBar();
         return mRootView;
+    }
+
+    private void updateFavoriteFab(){
+        mIsFavorite = mCursor.getInt(EntryLoader.Query.FAVORITE) == 1 ? true : false;
+        if (mIsFavorite){
+            mFavoriteFab.setImageResource(R.drawable.ic_bookmark_border_white);
+            mFavoriteFab.setContentDescription(getString(R.string.action_remove_favorite));
+        }else{
+            mFavoriteFab.setImageResource(R.drawable.ic_bookmark_white);
+            mFavoriteFab.setContentDescription(getString(R.string.action_favorite));
+        }
+        Log.v("UpdateFAV", Boolean.toString(mIsFavorite));
     }
 
     private void updateStatusBar() {
@@ -189,6 +221,8 @@ public class EntryDetailFragment extends Fragment implements
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
         bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        mFavoriteFab =
+                (android.support.design.widget.FloatingActionButton) mRootView.findViewById(R.id.favorite_fab);
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -226,6 +260,7 @@ public class EntryDetailFragment extends Fragment implements
                             mLoadingPanel.setVisibility(View.GONE);
                         }
                     });
+            updateFavoriteFab();
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");

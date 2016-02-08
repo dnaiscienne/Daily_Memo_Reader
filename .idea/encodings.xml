@@ -10,6 +10,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/ds/daily_memo_reader/ui/ObservableScrollView.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim-v21" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_bookmark_border_white.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_bookmark_white.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_sort.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/photo_background_protection.xml" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/scrim_bottom_gradient.xml" charset="windows-1252" />

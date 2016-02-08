@@ -19,25 +19,17 @@ public class EntriesDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + EntriesProvider.Tables.ENTRIES + " ("
                 + EntriesContract.EntriesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + EntriesContract.EntriesColumns.ENTRY_ID + " TEXT,"
+                + EntriesContract.EntriesColumns.ENTRY_ID + " TEXT NOT NULL,"
                 + EntriesContract.EntriesColumns.TITLE + " TEXT NOT NULL,"
                 + EntriesContract.EntriesColumns.AUTHOR + " TEXT NOT NULL,"
                 + EntriesContract.EntriesColumns.BODY + " TEXT NOT NULL,"
                 + EntriesContract.EntriesColumns.THUMB_URL + " TEXT NOT NULL,"
                 + EntriesContract.EntriesColumns.PHOTO_URL + " TEXT NOT NULL,"
-                + EntriesContract.EntriesColumns.PUBLISHED_DATE + " INTEGER NOT NULL DEFAULT 0"
+                + EntriesContract.EntriesColumns.PUBLISHED_DATE + " INTEGER NOT NULL DEFAULT 0,"
+                + EntriesContract.EntriesColumns.FAVORITE + " INTEGER NOT NULL DEFAULT 0," +
+                "UNIQUE (" + EntriesContract.EntriesColumns.ENTRY_ID + ") ON CONFLICT IGNORE"
                 + ")" );
 
-        db.execSQL("CREATE TABLE " + EntriesProvider.Tables.FAVORITES + " ("
-                + EntriesContract.EntriesColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + EntriesContract.EntriesColumns.ENTRY_ID + " TEXT,"
-                + EntriesContract.EntriesColumns.TITLE + " TEXT NOT NULL,"
-                + EntriesContract.EntriesColumns.AUTHOR + " TEXT NOT NULL,"
-                + EntriesContract.EntriesColumns.BODY + " TEXT NOT NULL,"
-                + EntriesContract.EntriesColumns.THUMB_URL + " TEXT NOT NULL,"
-                + EntriesContract.EntriesColumns.PHOTO_URL + " TEXT NOT NULL,"
-                + EntriesContract.EntriesColumns.PUBLISHED_DATE + " INTEGER NOT NULL DEFAULT 0"
-                + ")" );
     }
 
     @Override

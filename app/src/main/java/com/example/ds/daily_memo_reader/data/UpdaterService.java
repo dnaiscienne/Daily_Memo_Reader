@@ -53,9 +53,11 @@ public class UpdaterService  extends IntentService {
         ArrayList<ContentProviderOperation> cpo = new ArrayList<ContentProviderOperation>();
 
         Uri dirUri = EntriesContract.Entries.buildDirUri();
-
+        String selectionClause = EntriesContract.Entries.FAVORITE + " = ?";
+        String[] selectionArgs = {"0"};
         // Delete all items
-        cpo.add(ContentProviderOperation.newDelete(dirUri).build());
+//        cpo.add(ContentProviderOperation.newDelete(dirUri).build());
+        getContentResolver().delete(dirUri, selectionClause,selectionArgs);
 
         try {
             JSONArray array = RemoteEndpointUtil.fetchJsonArray();

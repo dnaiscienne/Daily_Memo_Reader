@@ -27,6 +27,8 @@ public class EntriesContract {
         String PHOTO_URL = "photo_url";
         /** Type: INTEGER NOT NULL DEFAULT 0 */
         String PUBLISHED_DATE = "published_date";
+        /** Type: INTEGER NOT NULL DEFAULT 0*/
+        String FAVORITE = "isFavorite";
     }
 
     public static class Entries implements EntriesColumns {

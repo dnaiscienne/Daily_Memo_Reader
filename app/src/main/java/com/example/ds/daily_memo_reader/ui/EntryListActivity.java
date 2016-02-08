@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.content.CursorLoader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -78,6 +79,7 @@ public class EntryListActivity extends AppCompatActivity implements
         mAppBarLayout = (AppBarLayout) findViewById(R.id.toolbar_container);
         SharedPreferences pref = getPreferences(MODE_PRIVATE);
         mFavorite = pref.getBoolean(PREF_FAVORITE, false);
+        Log.v("Show Favorite", Boolean.toString(mFavorite));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,11 +116,13 @@ public class EntryListActivity extends AppCompatActivity implements
                 item.setTitle(R.string.setting_toggle_recent);
                 Toast.makeText(this, "Favorites View", Toast.LENGTH_SHORT).show();
             }
+            editor.apply();
+            refreshList();
         }
 
         return super.onOptionsItemSelected(item);
     }
-
+    private void refreshList(){getLoaderManager().restartLoader(0, null, this);}
     private void refresh() {
         startService(new Intent(this, UpdaterService.class));
     }
@@ -154,7 +158,19 @@ public class EntryListActivity extends AppCompatActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return EntryLoader.newAllEntriesInstance(this);
+        if(mFavorite){
+            String selectionClause = EntriesContract.Entries.FAVORITE + " = ?";
+            String[] selectionArgs = {"1"};
+            return  new CursorLoader(this,
+                    EntriesContract.Entries.buildDirUri(),
+                    EntryLoader.Query.PROJECTION,
+                    selectionClause,
+                    selectionArgs,
+                    EntriesContract.Entries.DEFAULT_SORT);
+        }else{
+            return EntryLoader.newAllEntriesInstance(this);
+
+        }
     }
 
     @Override

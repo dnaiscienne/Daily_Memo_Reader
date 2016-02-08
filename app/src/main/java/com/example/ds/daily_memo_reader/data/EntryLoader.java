@@ -29,6 +29,7 @@ public class EntryLoader extends CursorLoader {
                 EntriesContract.Entries.THUMB_URL,
                 EntriesContract.Entries.PHOTO_URL,
                 EntriesContract.Entries.BODY,
+                EntriesContract.Entries.FAVORITE,
         };
 
         int _ID = 0;
@@ -38,5 +39,6 @@ public class EntryLoader extends CursorLoader {
         int THUMB_URL = 4;
         int PHOTO_URL = 5;
         int BODY = 6;
+        int FAVORITE = 7;
     }
 }
