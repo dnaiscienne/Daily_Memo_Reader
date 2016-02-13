@@ -14,16 +14,22 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -40,13 +46,16 @@ public class EntryDetailFragment extends Fragment implements
     private static final String TAG = "EntryDetailFragment";
 
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARD_TWO_PANE = "two_pane";
     private static final float PARALLAX_FACTOR = 1.25f;
 
+    private ShareActionProvider mShareActionProvider;
     private Cursor mCursor;
     private long mItemId;
     private View mRootView;
     private int mMutedColor = 0xFF333333;
     private ObservableScrollView mScrollView;
+    private ScrollView mNormalScrollView;
     private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
 
@@ -61,6 +70,8 @@ public class EntryDetailFragment extends Fragment implements
     private int mStatusBarFullOpacityBottom;
     private ProgressBar mLoadingPanel;
 
+    private boolean mTwoPane = false;
+
     private Activity mActivity;
 
     /**
@@ -68,11 +79,20 @@ public class EntryDetailFragment extends Fragment implements
      * fragment (e.g. upon screen orientation changes).
      */
     public EntryDetailFragment() {
+        setHasOptionsMenu(true);
     }
 
     public static EntryDetailFragment newInstance(long itemId) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_ITEM_ID, itemId);
+        EntryDetailFragment fragment = new EntryDetailFragment();
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+    public static EntryDetailFragment newInstance(long itemId, boolean twoPane) {
+        Bundle arguments = new Bundle();
+        arguments.putLong(ARG_ITEM_ID, itemId);
+        arguments.putBoolean(ARD_TWO_PANE, twoPane);
         EntryDetailFragment fragment = new EntryDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
@@ -85,11 +105,34 @@ public class EntryDetailFragment extends Fragment implements
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
+        if (getArguments().containsKey(ARD_TWO_PANE)){
+            mTwoPane = true;
+        }
 
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
         mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
                 R.dimen.detail_card_top_margin);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_detailfragment, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        mShareActionProvider.setShareIntent(createIntent());
+    }
+    public Intent createIntent() {
+        // When you want to share set the share intent.
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        if(mCursor != null){
+            String content = Html.fromHtml(mCursor.getString(EntryLoader.Query.BODY)).toString();
+            shareIntent.putExtra(Intent.EXTRA_TEXT, content);
+        }
+        return shareIntent;
     }
 
     public EntryDetailActivity getActivityCast() {
@@ -119,32 +162,38 @@ public class EntryDetailFragment extends Fragment implements
                 mTopInset = insets.top;
             }
         });
+        if(mTwoPane){
+           mNormalScrollView = (ScrollView) mRootView.findViewById(R.id.scrollview);
+        }else{
+            mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
+            mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
+                @Override
+                public void onScrollChanged() {
+                    mScrollY = mScrollView.getScrollY();
+                    getActivityCast().onUpButtonFloorChanged(mItemId, EntryDetailFragment.this);
+                    mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
+                    updateStatusBar();
+                }
+            });
+        }
 
-        mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
-        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
-            @Override
-            public void onScrollChanged() {
-                mScrollY = mScrollView.getScrollY();
-                getActivityCast().onUpButtonFloorChanged(mItemId, EntryDetailFragment.this);
-                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
-                updateStatusBar();
-            }
-        });
 
         mPhotoView = (EntryDetailImageView) mRootView.findViewById(R.id.photo);
         mPhotoContainerView = mRootView.findViewById(R.id.photo_container);
 
         mStatusBarColorDrawable = new ColorDrawable(0);
+        if(!mTwoPane){
+            mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                            .setType("text/plain")
+                            .setText("Some sample text")
+                            .getIntent(), getString(R.string.action_share)));
+                }
+            });
+        }
 
-        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("text/plain")
-                        .setText("Some sample text")
-                        .getIntent(), getString(R.string.action_share)));
-            }
-        });
 
         mRootView.findViewById(R.id.favorite_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +212,10 @@ public class EntryDetailFragment extends Fragment implements
         mLoadingPanel = (ProgressBar) mRootView.findViewById(R.id.loadingPanel);
         bindViews();
         updateStatusBar();
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(createIntent());
+
+        }
         return mRootView;
     }
 
@@ -289,7 +342,10 @@ public class EntryDetailFragment extends Fragment implements
             mCursor.close();
             mCursor = null;
         }
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(createIntent());
 
+        }
         bindViews();
     }
 

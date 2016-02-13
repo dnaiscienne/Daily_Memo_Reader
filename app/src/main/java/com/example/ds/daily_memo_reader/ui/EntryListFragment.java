@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -50,31 +51,40 @@ public class EntryListFragment extends Fragment implements
     private boolean mFavorite;
     private Activity mActivity;
 
+    public interface Callback {
+        public void onItemSelected(Bundle b);
+    }
+    public EntryListFragment(){
+        setHasOptionsMenu(true);
 
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this.getActivity();
-        if(mToolbar == null && mActivity != null){
-            mToolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
-        }
-
+//        if(mToolbar == null && mActivity != null){
+//            mToolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
+//            ((AppCompatActivity) mActivity).setSupportActionBar(mToolbar);
+//        }
 
     }
 
+
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if(mToolbar == null){
-            mActivity = this.getActivity();
-            mToolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
-        }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mActivity = this.getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_entry_list, container, false);
+        mToolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        if (mToolbar != null){
+            ((AppCompatActivity) mActivity).setSupportActionBar(mToolbar);
+            ((AppCompatActivity) mActivity).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 
@@ -238,8 +248,14 @@ public class EntryListFragment extends Fragment implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            EntriesContract.Entries.buildEntryUri(getItemId(vh.getAdapterPosition()))));
+                    Bundle b = new Bundle();
+//                    String uriString = EntriesContract.Entries.buildEntryUri(getItemId(vh.getAdapterPosition())).toString();
+                    long itemId = getItemId(vh.getAdapterPosition());
+                    b.putLong(EntryDetailFragment.ARG_ITEM_ID, itemId);
+                    ((Callback) getActivity())
+                            .onItemSelected(b);
+//                    startActivity(new Intent(Intent.ACTION_VIEW,
+//                            EntriesContract.Entries.buildEntryUri(getItemId(vh.getAdapterPosition()))));
                 }
             });
             return vh;
@@ -283,13 +299,19 @@ public class EntryListFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mAppBarLayout.addOnOffsetChangedListener(this);
+        if(mAppBarLayout != null){
+            mAppBarLayout.addOnOffsetChangedListener(this);
+
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mAppBarLayout.removeOnOffsetChangedListener(this);
+        if(mAppBarLayout != null){
+            mAppBarLayout.removeOnOffsetChangedListener(this);
+
+        }
     }
 
 }
