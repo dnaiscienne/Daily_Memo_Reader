@@ -3,6 +3,7 @@ package com.example.ds.daily_memo_reader.data;
 import android.app.IntentService;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.net.ConnectivityManager;
@@ -30,6 +31,8 @@ public class UpdaterService  extends IntentService {
             = "com.example.ds.daily_memo_reader.intent.action.STATE_CHANGE";
     public static final String EXTRA_REFRESHING
             = "com.example.ds.daily_memo_reader.intent.extra.REFRESHING";
+    public static final String ACTION_DATA_UPDATED =
+            "com.example.ds.daily_memo_reader.intent.extra.ACTION_DATA_UPDATED";
 
     public UpdaterService() {
         super(TAG);
@@ -57,7 +60,7 @@ public class UpdaterService  extends IntentService {
         String[] selectionArgs = {"0"};
         // Delete all items
 //        cpo.add(ContentProviderOperation.newDelete(dirUri).build());
-        getContentResolver().delete(dirUri, selectionClause,selectionArgs);
+        getContentResolver().delete(dirUri, selectionClause, selectionArgs);
 
         try {
             JSONArray array = RemoteEndpointUtil.fetchJsonArray();
@@ -80,12 +83,18 @@ public class UpdaterService  extends IntentService {
             }
 
             getContentResolver().applyBatch(EntriesContract.CONTENT_AUTHORITY, cpo);
-
+            updateWidgets(this);
         } catch (JSONException | RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Error updating content.", e);
         }
 
         sendStickyBroadcast(
                 new Intent(BROADCAST_ACTION_STATE_CHANGE).putExtra(EXTRA_REFRESHING, false));
+    }
+
+    private void updateWidgets(Context context) {
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
     }
 }

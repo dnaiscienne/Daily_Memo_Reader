@@ -13,4 +13,6 @@
 
     <string name="setting_toggle_favorite">Show Favorites</string>
     <string name="setting_toggle_recent">Show Recent</string>
+
+    <string name="no_entries">No entries to load</string>
 </resources>
