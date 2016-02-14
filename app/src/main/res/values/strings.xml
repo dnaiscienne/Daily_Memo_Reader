@@ -15,4 +15,10 @@
     <string name="setting_toggle_recent">Show Recent</string>
 
     <string name="no_entries">No entries to load</string>
+    <string name="no_internet">No network connection available</string>
+    <string name="test_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="pref_entry_status_key">entry-status</string>
+    <string name="pref_entry_name">entry-pref</string>
+    <string name="server_down">No entries to load. Server appears to be offline</string>
+    <string name="server_error">No entries to load. Please check for an updated version of this app</string>
 </resources>

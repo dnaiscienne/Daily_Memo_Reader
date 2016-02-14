@@ -6,13 +6,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.example.ds.daily_memo_reader.R;
 import com.example.ds.daily_memo_reader.remote.RemoteEndpointUtil;
 
 import org.json.JSONArray;
@@ -33,6 +36,11 @@ public class UpdaterService  extends IntentService {
             = "com.example.ds.daily_memo_reader.intent.extra.REFRESHING";
     public static final String ACTION_DATA_UPDATED =
             "com.example.ds.daily_memo_reader.intent.extra.ACTION_DATA_UPDATED";
+    public static final int ENTRY_STATUS_OK = 0;
+    public static final int ENTRY_STATUS_SERVER_DOWN = 1;
+    public static final int ENTRY_STATUS_SERVER_INVALID = 2;
+    public static final int ENTRY_STATUS_UNKNOWN = 3;
+    public static final int ENTRY_STATUS_INVALID = 4;
 
     public UpdaterService() {
         super(TAG);
@@ -65,6 +73,7 @@ public class UpdaterService  extends IntentService {
         try {
             JSONArray array = RemoteEndpointUtil.fetchJsonArray();
             if (array == null) {
+                setEntryStatus(this, ENTRY_STATUS_INVALID);
                 throw new JSONException("Invalid parsed item array" );
             }
 
@@ -86,6 +95,7 @@ public class UpdaterService  extends IntentService {
             updateWidgets(this);
         } catch (JSONException | RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Error updating content.", e);
+            setEntryStatus(this, ENTRY_STATUS_SERVER_DOWN);
         }
 
         sendStickyBroadcast(
@@ -96,5 +106,11 @@ public class UpdaterService  extends IntentService {
         Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
                 .setPackage(context.getPackageName());
         context.sendBroadcast(dataUpdatedIntent);
+    }
+    static private void setEntryStatus(Context c ,int entryStatus){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c.getApplicationContext());
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_entry_status_key), entryStatus);
+        spe.commit();
     }
 }

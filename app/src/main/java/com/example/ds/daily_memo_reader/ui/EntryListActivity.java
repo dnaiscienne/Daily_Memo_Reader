@@ -33,8 +33,8 @@ public class EntryListActivity extends AppCompatActivity implements  EntryListFr
         }else{
             mTwoPane = false;
         }
-
     }
+
 
     @Override
     public void onItemSelected(Bundle b) {
@@ -51,4 +51,5 @@ public class EntryListActivity extends AppCompatActivity implements  EntryListFr
         }
 
     }
+
 }

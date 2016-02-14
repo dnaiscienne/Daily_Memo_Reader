@@ -14,9 +14,9 @@
             android:id="@+id/widget_entry_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
             android:paddingTop="8dp"
-            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
             android:ellipsize="end"
             android:maxLines="1" />
 
@@ -24,8 +24,8 @@
             android:id="@+id/widget_entry_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="4dp"
             android:maxLines="1"
             android:singleLine="true"

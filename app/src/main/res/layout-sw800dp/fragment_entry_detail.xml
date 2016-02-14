@@ -64,8 +64,8 @@
                     android:background="#333"
                     android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    android:paddingLeft="@dimen/detail_inner_horiz_margin"
-                    android:paddingRight="@dimen/detail_inner_horiz_margin"
+                    android:paddingStart="@dimen/detail_inner_horiz_margin"
+                    android:paddingEnd="@dimen/detail_inner_horiz_margin"
                     android:paddingBottom="@dimen/detail_metabar_vert_padding"
                     android:layout_marginBottom="@dimen/detail_metabar_vert_padding">
 
@@ -75,13 +75,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/detail_metabar_title_bottom_padding"
-                        android:lineSpacingMultiplier="0.9" />
+                        android:lineSpacingMultiplier="0.9"
+                        android:focusable="true"/>
 
                     <TextView
                         android:id="@+id/article_byline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Theme.Bacon.Article.Byline"/>
+                        style="@style/Theme.Bacon.Article.Byline"
+                        android:focusable="true"/>
                 </LinearLayout>
 
                 <TextView
@@ -89,10 +91,11 @@
                     style="@style/Theme.Bacon.Article.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/detail_inner_horiz_margin"
-                    android:layout_marginRight="@dimen/detail_inner_horiz_margin"
+                    android:layout_marginStart="@dimen/detail_inner_horiz_margin"
+                    android:layout_marginEnd="@dimen/detail_inner_horiz_margin"
                     android:paddingBottom="@dimen/detail_body_bottom_margin"
-                    android:lineSpacingMultiplier="@fraction/detail_body_line_spacing_multiplier" />
+                    android:lineSpacingMultiplier="@fraction/detail_body_line_spacing_multiplier"
+                    android:focusable="true"/>
 
             </com.example.ds.daily_memo_reader.ui.MaxWidthLinearLayout>
         </FrameLayout>
@@ -115,46 +118,16 @@
             android:stateListAnimator="@anim/fab_state_list_anim"
             android:layout_marginTop="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin_adjacent"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_bookmark_border_white"
-            android:contentDescription="@string/action_favorite" />
+            android:contentDescription="@string/action_favorite"
+            android:focusable="true"/>
 
 
 
     </LinearLayout>
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-
-        <!--android:id="@+id/share_fab"-->
-        <!--app:elevation="@dimen/fab_elevation"-->
-        <!--app:fabSize="normal"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--app:pressedTranslationZ="@dimen/fab_press_translation_z"-->
-        <!--app:borderWidth="0dp"-->
-        <!--android:stateListAnimator="@anim/fab_state_list_anim"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_share"-->
-        <!--android:contentDescription="@string/action_share" />-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-
-        <!--android:id="@+id/favorite_fab"-->
-        <!--app:elevation="@dimen/fab_elevation"-->
-        <!--app:fabSize="normal"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--app:pressedTranslationZ="@dimen/fab_press_translation_z"-->
-        <!--app:borderWidth="0dp"-->
-        <!--android:stateListAnimator="@anim/fab_state_list_anim"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_bookmark_border_white"-->
-        <!--android:contentDescription="@string/action_favorite" />-->
-
 
 </com.example.ds.daily_memo_reader.ui.DrawInsetsFrameLayout>

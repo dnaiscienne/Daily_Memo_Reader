@@ -12,6 +12,7 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,16 +33,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ds.daily_memo_reader.R;
+import com.example.ds.daily_memo_reader.Utility;
 import com.example.ds.daily_memo_reader.data.EntriesContract;
 import com.example.ds.daily_memo_reader.data.EntryLoader;
 import com.example.ds.daily_memo_reader.data.UpdaterService;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.squareup.picasso.Picasso;
 
 /**
  * Created by DS on 2/10/2016.
  */
 public class EntryListFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> , AppBarLayout.OnOffsetChangedListener{
+        LoaderManager.LoaderCallbacks<Cursor> , AppBarLayout.OnOffsetChangedListener, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private  Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -50,9 +55,12 @@ public class EntryListFragment extends Fragment implements
     private static final String PREF_FAVORITE = "favorite";
     private boolean mFavorite;
     private Activity mActivity;
+    InterstitialAd mInterstitialAd;
+    private Bundle mBundle;
+
 
     public interface Callback {
-        public void onItemSelected(Bundle b);
+        void onItemSelected(Bundle b);
     }
     public EntryListFragment(){
         setHasOptionsMenu(true);
@@ -62,13 +70,28 @@ public class EntryListFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this.getActivity();
-//        if(mToolbar == null && mActivity != null){
-//            mToolbar = (Toolbar) mActivity.findViewById(R.id.toolbar);
-//            ((AppCompatActivity) mActivity).setSupportActionBar(mToolbar);
-//        }
+        mInterstitialAd = new InterstitialAd(mActivity);
+        mInterstitialAd.setAdUnitId(getString(R.string.test_ad_unit_id));
 
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+                ((Callback) getActivity())
+                        .onItemSelected(mBundle);
+            }
+        });
+
+        requestNewInterstitial();
     }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -130,25 +153,32 @@ public class EntryListFragment extends Fragment implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        SharedPreferences pref = mActivity.getPreferences(0);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
 
         //noinspection SimplifiableIfStatement
 
         if (id == R.id.toggle_favorite) {
             SharedPreferences.Editor editor = pref.edit();
+            boolean internet = Utility.isNetworkAvailable(mActivity);
             if(mFavorite){
-                mFavorite = false;
-                editor.putBoolean(PREF_FAVORITE, mFavorite);
-                item.setTitle(R.string.setting_toggle_favorite);
-                Toast.makeText(mActivity, "Recent View", Toast.LENGTH_SHORT).show();
-            }else{
+                if(!internet){
+                    Toast.makeText(mActivity, R.string.no_internet, Toast.LENGTH_SHORT).show();
+                }else{
+                    mFavorite = false;
+                    editor.putBoolean(PREF_FAVORITE, mFavorite);
+                    item.setTitle(R.string.setting_toggle_favorite);
+                    Toast.makeText(mActivity, "Recent View", Toast.LENGTH_SHORT).show();
+                }
+            } else{
                 mFavorite = true;
                 editor.putBoolean(PREF_FAVORITE, mFavorite);
                 item.setTitle(R.string.setting_toggle_recent);
                 Toast.makeText(mActivity, "Favorites View", Toast.LENGTH_SHORT).show();
             }
-            editor.apply();
-            refreshList();
+            if(internet){
+                editor.apply();
+                refreshList();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -156,7 +186,14 @@ public class EntryListFragment extends Fragment implements
     private void refreshList(){getLoaderManager().restartLoader(0, null, this);}
 
     private void refresh() {
-        mActivity.startService(new Intent(mActivity, UpdaterService.class));
+        if(Utility.isNetworkAvailable(mActivity)){
+            mActivity.startService(new Intent(mActivity, UpdaterService.class));
+        }else{
+            Toast.makeText(mActivity, R.string.no_internet, Toast.LENGTH_SHORT).show();
+            mIsRefreshing = false;
+            updateRefreshingUI();
+        }
+
     }
 
     @Override
@@ -249,23 +286,36 @@ public class EntryListFragment extends Fragment implements
                 @Override
                 public void onClick(View view) {
                     Bundle b = new Bundle();
-//                    String uriString = EntriesContract.Entries.buildEntryUri(getItemId(vh.getAdapterPosition())).toString();
                     long itemId = getItemId(vh.getAdapterPosition());
                     b.putLong(EntryDetailFragment.ARG_ITEM_ID, itemId);
-                    ((Callback) getActivity())
-                            .onItemSelected(b);
-//                    startActivity(new Intent(Intent.ACTION_VIEW,
-//                            EntriesContract.Entries.buildEntryUri(getItemId(vh.getAdapterPosition()))));
+                    if (mInterstitialAd.isLoaded()) {
+                        mBundle = b;
+                        Log.v("HELLO-ADS", "loaded");
+                        mInterstitialAd.show();
+                    }else{
+                        ((Callback) getActivity())
+                                .onItemSelected(b);
+                    }
+
                 }
             });
             return vh;
         }
 
+
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             mCursor.moveToPosition(position);
             holder.titleView.setText(mCursor.getString(EntryLoader.Query.TITLE));
+            holder.titleView.setContentDescription(mCursor.getString(EntryLoader.Query.TITLE));
             holder.subtitleView.setText(
+                    DateUtils.getRelativeTimeSpanString(
+                            mCursor.getLong(EntryLoader.Query.PUBLISHED_DATE),
+                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_ALL).toString()
+                            + " by "
+                            + mCursor.getString(EntryLoader.Query.AUTHOR));
+            holder.subtitleView.setContentDescription(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(EntryLoader.Query.PUBLISHED_DATE),
                             System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
@@ -303,6 +353,8 @@ public class EntryListFragment extends Fragment implements
             mAppBarLayout.addOnOffsetChangedListener(this);
 
         }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+        sp.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -311,6 +363,27 @@ public class EntryListFragment extends Fragment implements
         if(mAppBarLayout != null){
             mAppBarLayout.removeOnOffsetChangedListener(this);
 
+        }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+
+    }
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_entry_status_key))) {
+            int entry = Utility.getEntryStatus(mActivity);
+            switch (entry){
+                case UpdaterService.ENTRY_STATUS_SERVER_DOWN:
+                    Toast.makeText(mActivity, R.string.server_down, Toast.LENGTH_SHORT).show();
+                    break;
+                case UpdaterService.ENTRY_STATUS_SERVER_INVALID:
+                    Toast.makeText(mActivity, R.string.server_error, Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    if (!Utility.isNetworkAvailable(getActivity())) {
+                        Toast.makeText(mActivity, R.string.no_internet, Toast.LENGTH_SHORT).show();
+                    }
+            }
         }
     }
 

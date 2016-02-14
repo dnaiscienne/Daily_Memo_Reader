@@ -282,6 +282,16 @@ public class EntryDetailFragment extends Fragment implements
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
             titleView.setText(mCursor.getString(EntryLoader.Query.TITLE));
+            titleView.setContentDescription(mCursor.getString(EntryLoader.Query.TITLE));
+            bylineView.setText(Html.fromHtml(
+                    DateUtils.getRelativeTimeSpanString(
+                            mCursor.getLong(EntryLoader.Query.PUBLISHED_DATE),
+                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_ALL).toString()
+                            + " by <font color='#ffffff'>"
+                            + mCursor.getString(EntryLoader.Query.AUTHOR)
+                            + "</font>"));
+            bylineView.setContentDescription(mCursor.getString(EntryLoader.Query.TITLE));
             bylineView.setText(Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(EntryLoader.Query.PUBLISHED_DATE),
@@ -291,6 +301,7 @@ public class EntryDetailFragment extends Fragment implements
                             + mCursor.getString(EntryLoader.Query.AUTHOR)
                             + "</font>"));
             bodyView.setText(Html.fromHtml(mCursor.getString(EntryLoader.Query.BODY)));
+            bodyView.setContentDescription(Html.fromHtml(mCursor.getString(EntryLoader.Query.BODY)));
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(EntryLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
