@@ -2,10 +2,11 @@
 <resources>
     <color name="photo_placeholder">#ccc</color>
 
-    <color name="deep_orange_400">#FF7043</color>
     <!-- Main Theme Colors-->
-    <color name="deep_orange_500">#FF5722</color>
-    <color name="deep_orange_700">#E64A19</color>
+
+    <color name="deep_blue_900">#0D47A1</color>
+    <color name="deep_blue_500">#2196F3</color>
+    <color name="coral_pink">#FF80AB</color>
 
     <color name="orange_900">#E65100</color>
     <color name="teal_500">#009688</color>

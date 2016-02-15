@@ -1,45 +1,45 @@
 <resources>
 
-    <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:colorPrimary">@color/deep_orange_500</item>
-        <item name="android:colorPrimaryDark">@color/deep_orange_700</item>
-        <item name="android:colorAccent">@color/teal_500</item>
+    <style name="Theme.OceanSky" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/deep_blue_500</item>
+        <item name="android:colorPrimaryDark">@color/deep_blue_900</item>
+        <item name="android:colorAccent">@color/coral_pink</item>
 
     </style>
 
-    <style name="Theme.Bacon.Detail">
+    <style name="Theme.OceanSky.Detail">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.Bacon.List">
+    <style name="Theme.OceanSky.List">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">@color/ltgray</item>
     </style>
 
-    <style name="Theme.Bacon.List.Title">
+    <style name="Theme.OceanSky.List.Title">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
 
     </style>
 
-    <style name="Theme.Bacon.List.SubTitle">
+    <style name="Theme.OceanSky.List.SubTitle">
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Theme.Bacon.Article">
+    <style name="Theme.OceanSky.Article">
         <item name="android:fontFamily">sans-serif</item>
     </style>
-    <style name="Theme.Bacon.Article.Title">
+    <style name="Theme.OceanSky.Article.Title">
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/detail_title_text_size</item>
     </style>
-    <style name="Theme.Bacon.Article.Byline">
+    <style name="Theme.OceanSky.Article.Byline">
         <item name="android:textColor">@color/midgray</item>
         <item name="android:textSize">16sp</item>
     </style>
-    <style name="Theme.Bacon.Article.Body">
+    <style name="Theme.OceanSky.Article.Body">
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/gray_900</item>

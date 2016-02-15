@@ -71,7 +71,7 @@
 
                     <TextView
                         android:id="@+id/article_title"
-                        style="@style/Theme.Bacon.Article.Title"
+                        style="@style/Theme.OceanSky.Article.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/detail_metabar_title_bottom_padding"
@@ -82,13 +82,13 @@
                         android:id="@+id/article_byline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Theme.Bacon.Article.Byline"
+                        style="@style/Theme.OceanSky.Article.Byline"
                         android:focusable="true"/>
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/article_body"
-                    style="@style/Theme.Bacon.Article.Body"
+                    style="@style/Theme.OceanSky.Article.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/detail_inner_horiz_margin"

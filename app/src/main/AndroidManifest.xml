@@ -12,7 +12,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Bacon" >
+        android:theme="@style/Theme.OceanSky"
+        android:name=".MyApplication">
 
         <activity android:name=".ui.EntryListActivity"
             android:label="Daily Memo">

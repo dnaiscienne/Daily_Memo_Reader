@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.example.ds.daily_memo_reader.MyApplication;
 import com.example.ds.daily_memo_reader.R;
 import com.example.ds.daily_memo_reader.data.EntriesContract;
 
@@ -33,6 +34,7 @@ public class EntryListActivity extends AppCompatActivity implements  EntryListFr
         }else{
             mTwoPane = false;
         }
+        ((MyApplication) getApplication()).startTracking();
     }
 
 

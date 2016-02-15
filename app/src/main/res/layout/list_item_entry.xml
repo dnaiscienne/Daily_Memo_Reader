@@ -31,7 +31,7 @@
             android:layout_gravity="bottom">
             <TextView
                 android:id="@+id/entry_title"
-                style="@style/Theme.Bacon.List.Title"
+                style="@style/Theme.OceanSky.List.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/entry_subtitle"
-                style="@style/Theme.Bacon.List.SubTitle"
+                style="@style/Theme.OceanSky.List.SubTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
